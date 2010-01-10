@@ -26,7 +26,6 @@ SET( libnoise-view_SOURCES
 SET( libnoise-view_MOC_HEADERS
   src/mainWidget.h
   src/renderThread.h
-  src/renderJob.h
   src/threadJobControl.h
   src/movableGraphicsView.h
 )
