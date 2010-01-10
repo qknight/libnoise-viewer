@@ -1,0 +1,16 @@
+this qt4 based project visualizes libnoise graphs.
+
+author: joachim schiele <js adt lastlog doddt de>
+
+libnoise graphs are a set of noise modules which are composed into an image. this
+project not only displays a single image but gives you the impression you are
+watching a planetary surface using a camera in a satelite.
+
+it is interesting to see the scale of complex surface resulting from combinding
+simple modules even in the most basic setup.
+
+this project will later be included in one of my other projects, found here:
+ * http://github.com/qknight/springrts.com-random-map-generator
+
+source code for libnoise-viewer:
+ * http://github.com/qknight/libnoise-viewer

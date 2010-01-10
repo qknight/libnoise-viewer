@@ -42,17 +42,11 @@ mainWidget::mainWidget(QDialog* parent) : QDialog(parent) {
   frequencyleft->setValue(frequency);
   octavesleft->setValue(octave);
 
-  xoffsetBox->setValue(xoffset);
-  yoffsetBox->setValue(yoffset);
-
   connect(octavesleft,SIGNAL(valueChanged ( int )),this,
         SLOT(octave_changed(int)));
   connect(frequencyleft,SIGNAL(valueChanged ( double )),this,
         SLOT(frequency_changed(double)));
-  connect(xoffsetBox,SIGNAL(valueChanged ( int )),this,
-        SLOT(xoffset_changed(int)));
-  connect(yoffsetBox,SIGNAL(valueChanged ( int )),this,
-        SLOT(yoffset_changed(int)));
+
 
   connect(r1,SIGNAL( toggled ( bool )),
       this,SLOT( colorstate_changed(bool)));
@@ -169,8 +163,8 @@ void mainWidget::moveTileBoxRelative(int x, int y) {
   settings->setValue("xoffset", xBoxOffset);
   settings->setValue("yoffset", yBoxOffset);
 
-  xoffsetBox->setValue(xBoxOffset);
-  yoffsetBox->setValue(yBoxOffset);
+//   xoffsetBox->setValue(xBoxOffset);
+//   yoffsetBox->setValue(yBoxOffset);
 
 //   s1cene->addText(". 0/0 is here");
 

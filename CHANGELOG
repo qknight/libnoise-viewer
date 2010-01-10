@@ -1,0 +1,4 @@
+2010-01-10
+ - removed unused gui controlls in mainWidget.ui
+ - moved this project to github.com
+ - inital cmake support added

@@ -14,7 +14,8 @@
 
 threadJobControl::threadJobControl() {
   runningJobs=0;
-  connect(this,SIGNAL(jobStatusChangedSig()),this,SLOT(jobStatusChanged()));
+  connect(this, SIGNAL(jobStatusChangedSig()),
+	  this, SLOT(jobStatusChanged()));
 }
 threadJobControl::~threadJobControl() { }
 

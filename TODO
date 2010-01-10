@@ -4,6 +4,10 @@ known bugs/issues:
 - render the viewrect only. disable renderjobs outside it
 - increase importance of renderjobs inside the viewBox
 - remove all TODOs
+- switching from back/white to color sometimes leaves black/white tiles on the QGraphicsScene since jobs
+  aren't canceled on change as well, so:
+  - first cancel all pending jobs
+  - next change the color
 
   // TODO make sceneWidth dynamic in boundaries
 - QTimeLine for smooth scrolling
