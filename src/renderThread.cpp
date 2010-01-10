@@ -90,15 +90,15 @@ renderJob renderThread::generateRawImage (renderJob job) {
     renderer.ClearGradient ();
 
     renderer.AddGradientPoint ( 1.000000, utils::Color (0, 90, 0, 255));
-    renderer.AddGradientPoint ( 0.940000, utils::Color (0, 129, 0, 255));
-    renderer.AddGradientPoint ( 0.900000, utils::Color (0, 190, 0, 255));
-    renderer.AddGradientPoint ( 0.850000, utils::Color (0, 250, 0, 255));
-    renderer.AddGradientPoint ( 0.800000, utils::Color (120, 250, 250, 255));
-    renderer.AddGradientPoint ( 0.590000, utils::Color (20, 120, 200, 255));
-    renderer.AddGradientPoint ( 0.540000, utils::Color (20, 50, 250, 255));
-    renderer.AddGradientPoint ( 0.400000, utils::Color (0, 0, 120, 255));
+    renderer.AddGradientPoint ( 0.740000, utils::Color (0, 129, 0, 255));
+    renderer.AddGradientPoint ( 0.700000, utils::Color (0, 190, 0, 255));
+    renderer.AddGradientPoint ( 0.650000, utils::Color (0, 250, 0, 255));
+    renderer.AddGradientPoint ( 0.600000, utils::Color (120, 250, 250, 255));
+    renderer.AddGradientPoint ( 0.390000, utils::Color (20, 120, 200, 255));
+    renderer.AddGradientPoint ( 0.340000, utils::Color (20, 50, 250, 255));
+    renderer.AddGradientPoint ( 0.200000, utils::Color (0, 0, 120, 255));
 
-    renderer.EnableLight ();
+    renderer.EnableLight();
     renderer.SetLightContrast (3.0); // Triple the contrast
     renderer.SetLightBrightness (2.0); // Double the brightness
   }

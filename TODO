@@ -1,9 +1,14 @@
+known bugs/issues:
 - kill threads: disable jobs which are not needed anymore  [bug]
-- give job by reference not by object copy
+- give job by reference not by value (object copy)
 - render the viewrect only. disable renderjobs outside it
 - increase importance of renderjobs inside the viewBox
 - remove all TODOs
+
   // TODO make sceneWidth dynamic in boundaries
 - QTimeLine for smooth scrolling
 - remove prerender images from scene (right now they are just hidden)
-- zoom issue: when zooming in the x coordinate is misplaced for some reason?!
+
+question:
+ - can the frequency be changed without loosing current x/y position outside the center?
+  - known as 'zoom issue': when zooming in the x coordinate is misplaced for some reason?!
