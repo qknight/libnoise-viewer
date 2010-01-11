@@ -12,6 +12,7 @@
 #ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
+#include <QDebug>
 #include <QDialog>
 #include <QGraphicsScene>
 #include <QGraphicsPixmapItem>
@@ -45,6 +46,7 @@ class mainWidget : public QDialog, private Ui::noiseViewWidget
     int yoffset;
     threadJobControl* tjc;
     static const int cellsize = 100;
+    /*! dispatches renderJobs which generate the tile at position x,y and return them via signal/slot */
     void generateTile(int x, int y);
     QGraphicsRectItem* viewBox;
   private:
@@ -56,11 +58,11 @@ class mainWidget : public QDialog, private Ui::noiseViewWidget
     void colorstate_changed(bool);
     void frequency_changed(double);
     void octave_changed(int);
-    void xoffset_changed(int);
-    void yoffset_changed(int);
+//     void xoffset_changed(int);
+//     void yoffset_changed(int);
     void jobDone(renderJob job);
     void moveSceneRectBy(int x, int y);
-    void moveSceneRectAbsolute(int x, int y);
+//     void moveSceneRectAbsolute(int x, int y);
   signals:
     void jobDoneSig(renderJob job);
 };

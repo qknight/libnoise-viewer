@@ -15,9 +15,9 @@ mainWidget::mainWidget(QDialog* parent) : QDialog(parent) {
   tjc = new threadJobControl;
   scene = new movableGraphicsScene;
   graphicsView->setScene(scene);
-  graphicsView->setResizeAnchor (QGraphicsView::AnchorViewCenter);
-  graphicsView->setAlignment ( Qt::AlignCenter);
-  settings = new QSettings("textureGenerator", "fluxi");
+//   graphicsView->setResizeAnchor (QGraphicsView::AnchorViewCenter);
+//   graphicsView->setAlignment ( Qt::AlignCenter);
+  settings = new QSettings("libnoise-view", "qknight");
 
   frequency = settings->value("frequency", 0.002).toDouble();;
   octave = settings->value("octave", 4).toInt();
@@ -30,7 +30,8 @@ mainWidget::mainWidget(QDialog* parent) : QDialog(parent) {
   xoffset=settings->value("xoffset",0).toInt();
   yoffset=settings->value("yoffset",0).toInt();
 
-  graphicsView->setSceneRect (-sceneWidth/2,-sceneHeight/2,sceneWidth,sceneHeight);
+  graphicsView->setSceneRect (-sceneWidth/4,-sceneHeight/4,sceneWidth,sceneHeight);
+//   graphicsView->setSceneRect (-sceneWidth/4,-sceneHeight/4,sceneWidth,sceneHeight);
 
   connect(tjc,SIGNAL(jobDoneSig(renderJob)), this,
         SLOT(jobDone(renderJob))/*,Qt::QueuedConnection*/);
@@ -47,7 +48,6 @@ mainWidget::mainWidget(QDialog* parent) : QDialog(parent) {
   connect(frequencyleft,SIGNAL(valueChanged ( double )),this,
         SLOT(frequency_changed(double)));
 
-
   connect(r1,SIGNAL( toggled ( bool )),
       this,SLOT( colorstate_changed(bool)));
   connect(graphicsView, SIGNAL(onMoveSig(int,int)),
@@ -55,7 +55,7 @@ mainWidget::mainWidget(QDialog* parent) : QDialog(parent) {
 
   // only needed for initialization of viewBox
   // TODO remove later
-  viewBox = scene->addRect (QRectF(0,0,0,0));
+//   viewBox = scene->addRect (QRectF(0,0,0,0));
   resetTiles();
 //   moveSceneRectAbsolute(xoffset,yoffset);
 }
@@ -99,16 +99,16 @@ void mainWidget::moveSceneRectBy(int x, int y) {
   graphicsView->setSceneRect(v);
 }
 
-void mainWidget::moveSceneRectAbsolute(int x, int y) {
-  //TODO
-  if (x == xoffset && y == yoffset)
-    return;
-  qDebug("todo");
-  return;
-  QRectF v = graphicsView->sceneRect();
-  v.moveTo(v.x()+x, v.y()+y);
-  graphicsView->setSceneRect(v);
-}
+// void mainWidget::moveSceneRectAbsolute(int x, int y) {
+//   //TODO
+//   if (x == xoffset && y == yoffset)
+//     return;
+//   qDebug() << __PRETTY_FUNCTION__ << "todo";
+//   return;
+//   QRectF v = graphicsView->sceneRect();
+//   v.moveTo(v.x()+x, v.y()+y);
+//   graphicsView->setSceneRect(v);
+// }
 
 void mainWidget::colorstate_changed( bool state){
   settings->setValue("drawcoloredOrBlackWhite", state);
@@ -128,15 +128,16 @@ void mainWidget::octave_changed(int i){
   resetTiles();
 }
 
-void mainWidget::xoffset_changed(int x){
-  settings->setValue("xoffset", x);
-  moveSceneRectAbsolute(x,yoffset);
-}
-
-void mainWidget::yoffset_changed(int y){
-  settings->setValue("yoffset", y);
-  moveSceneRectAbsolute(xoffset,y);
-}
+// void mainWidget::xoffset_changed(int x){
+//   settings->setValue("xoffset", x);
+//   exit(0);
+//   moveSceneRectAbsolute(x,yoffset);
+// }
+// 
+// void mainWidget::yoffset_changed(int y){
+//   settings->setValue("yoffset", y);
+//   moveSceneRectAbsolute(xoffset,y);
+// }
 
 void mainWidget::resetTiles() {
   tjc->clearJobs();
@@ -145,12 +146,17 @@ void mainWidget::resetTiles() {
     scene->removeItem(z);
   }
 
-  scene->addLine(QLineF(-600,0,600,0));
-  scene->addLine(QLineF(0,-600,0,600));
+//   scene->addLine(QLineF(-600,0,600,0));
+//   scene->addLine(QLineF(0,-600,0,600));
 
   moveTileBoxRelative(0,0);
 }
 
+/*!
+the QGraphicsView's width/height is covered by the TileBox.
+to be precises: the TileBox is even more. the idea is to compute the tiles in advance.
+this helps to get a more interactive feeling...
+*/
 void mainWidget::moveTileBoxRelative(int x, int y) {
   static int xBoxOffset=0;
   static int yBoxOffset=0;
@@ -184,15 +190,14 @@ void mainWidget::moveTileBoxRelative(int x, int y) {
 
 //   qDebug("xboxes: %i yboxes: %i", xboxes, yboxes);
 
-  scene->removeItem( viewBox );
-
   int rx1 =  xBoxOffset * cellsize + cellsize * (-xboxes/2);
   int ry1 =  yBoxOffset * cellsize + cellsize * (-yboxes/2);
   int rx2 =  cellsize * (xboxes);
   int ry2 =  cellsize * (yboxes);
 
-  viewBox = scene->addRect (QRectF(rx1,ry1,rx2,ry2));
-  viewBox->setZValue(200);
+//   scene->removeItem( viewBox );
+//   viewBox = scene->addRect (QRectF(rx1,ry1,rx2,ry2));
+//   viewBox->setZValue(200);
 
   int n=0;
   for(int x=xBoxOffset-xboxes/2+1; x < xBoxOffset+xboxes/2+1; ++x) {
@@ -205,6 +210,9 @@ void mainWidget::moveTileBoxRelative(int x, int y) {
 //   qDebug("generated %i tiles", n);
 }
 
+/*!
+this will create a new thread for computing a new tile
+*/
 void mainWidget::generateTile(int x, int y) {
   int itempos_x = x*cellsize+xoffset-cellsize;
   int itempos_y = y*cellsize+yoffset-cellsize;
@@ -225,20 +233,26 @@ void mainWidget::generateTile(int x, int y) {
   job.y=itempos_y;
   job.cellsize=cellsize;
   job.colorstate=colorstate;
-  job.speedup=1;
+
   job.width=cellsize;
   job.height=cellsize;
   job.octave=octave;
   job.frequency=frequency;
-
+  
+  // no speedup, speedup = 1
+  job.speedup=1;
   tjc->queueJob(job);
 
+  // this dispatches the second renderjob which is much faster done
   job.speedup=4;
-
   tjc->queueJob(job);
+  
   tileCoordinatesDB.push_back(QPoint(itempos_x, itempos_y));
 }
 
+/*!
+This function is called, when a new tile is rendered and should be displayed in the main gui thread
+*/
 void mainWidget::jobDone(renderJob job){
   int speedup = job.speedup;
   int width = job.width;
@@ -260,7 +274,7 @@ void mainWidget::jobDone(renderJob job){
   ni->moveBy(job.x-xoffset, job.y-yoffset);
   ni->setZValue(-job.speedup);
   scene->addItem(ni);
-//   qDebug("Time elapsed: %d ms", tracker.elapsed());
+//   qDebug("Time elapsed to process the rawimage into an image and adding it to the scene: %d ms", tracker.elapsed());
   itemLabel->setText(QString("%1").arg(scene->items().size()));
 }
 
