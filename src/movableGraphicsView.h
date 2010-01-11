@@ -14,6 +14,7 @@
 
 #include <QGraphicsView>
 #include <QMouseEvent>
+#include <QDebug>
 /**
 	@author Joachim Schiele <js@lastlog.de>
 */
@@ -25,6 +26,7 @@ class movableGraphicsView : public QGraphicsView
     movableGraphicsView(QWidget * parent = 0);
     ~movableGraphicsView();
   private:
+    void resizeEvent ( QResizeEvent * event );
     void mouseMoveEvent ( QMouseEvent * event );
     void mousePressEvent ( QMouseEvent * event );
     void mouseReleaseEvent ( QMouseEvent * event );

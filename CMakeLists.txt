@@ -13,17 +13,18 @@ find_package(Qt4)
 
 
 SET( libnoise-view_SOURCES 
+ src/TileBox.cpp 
  src/mainWidget.cpp 
  src/noiseutils.cpp 
  src/main.cpp 
  src/renderThread.cpp 
- src/movableGraphicsScene.cpp 
  src/movableGraphicsView.cpp 
  src/renderJob.cpp 
  src/threadJobControl.cpp
 )
 
 SET( libnoise-view_MOC_HEADERS
+  src/TileBox.h
   src/mainWidget.h
   src/renderThread.h
   src/threadJobControl.h

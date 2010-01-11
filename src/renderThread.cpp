@@ -51,8 +51,8 @@ renderJob renderThread::generateRawImage (renderJob job) {
 //     qDebug("frequency %f",job.frequency);
 
 //     module::Voronoi myModule;
-  module::RidgedMulti myModule;
-//    module::Perlin myModule;
+//   module::RidgedMulti myModule;
+   module::Perlin myModule;
 //   module::Billow myModule;
 //  module::Spheres myModule;
 

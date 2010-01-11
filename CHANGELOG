@@ -1,3 +1,13 @@
+2010-01-11
+ - BUG: the graphicsview is smaller than the area it visualizes?!
+   how to reproduce:
+    - compile last commit (not this one)
+    - start the program
+    - use the cursor keys, it will be able to move the graphicsView some pixels
+   FIXED with: 
+   void movableGraphicsView::resizeEvent ( QResizeEvent * event ) {
+      setSceneRect(QRect(0, 0, width()-6, height()-6));
+
 2010-01-10
  - removed unused gui controlls in mainWidget.ui
  - moved this project to github.com

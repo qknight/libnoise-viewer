@@ -13,28 +13,22 @@
 mainWidget::mainWidget(QDialog* parent) : QDialog(parent) {
   setupUi(this);
   tjc = new threadJobControl;
-  scene = new movableGraphicsScene;
+  scene = new QGraphicsScene;
   graphicsView->setScene(scene);
-//   graphicsView->setResizeAnchor (QGraphicsView::AnchorViewCenter);
-//   graphicsView->setAlignment ( Qt::AlignCenter);
+  graphicsView->setSceneRect(-200, -200, 200, 200);
+// //   graphicsView->setResizeAnchor (QGraphicsView::AnchorViewCenter);
+// //   graphicsView->setAlignment ( Qt::AlignCenter);
+  graphicsView->centerOn(QPoint(0,0));
   settings = new QSettings("libnoise-view", "qknight");
 
   frequency = settings->value("frequency", 0.002).toDouble();;
   octave = settings->value("octave", 4).toInt();
   colorstate = settings->value("drawcoloredOrBlackWhite", true).toBool();
 
-  int sceneWidth=800;
-  int sceneHeight=800;
   static const int cellsize = 100;
 
-  xoffset=settings->value("xoffset",0).toInt();
-  yoffset=settings->value("yoffset",0).toInt();
-
-  graphicsView->setSceneRect (-sceneWidth/4,-sceneHeight/4,sceneWidth,sceneHeight);
-//   graphicsView->setSceneRect (-sceneWidth/4,-sceneHeight/4,sceneWidth,sceneHeight);
-
   connect(tjc,SIGNAL(jobDoneSig(renderJob)), this,
-        SLOT(jobDone(renderJob))/*,Qt::QueuedConnection*/);
+        SLOT(jobDone(renderJob)));
 
   if (colorstate)
     r1->setChecked(true);
@@ -53,11 +47,7 @@ mainWidget::mainWidget(QDialog* parent) : QDialog(parent) {
   connect(graphicsView, SIGNAL(onMoveSig(int,int)),
       this, SLOT(moveSceneRectBy(int,int)));
 
-  // only needed for initialization of viewBox
-  // TODO remove later
-//   viewBox = scene->addRect (QRectF(0,0,0,0));
   resetTiles();
-//   moveSceneRectAbsolute(xoffset,yoffset);
 }
 
 mainWidget::~mainWidget(){ }
@@ -66,8 +56,15 @@ void mainWidget::moveSceneRectBy(int x, int y) {
   // first let's see if the change affects more than a cellwidth
   static int xdelta=0;
   static int ydelta=0;
+  
   xdelta+=x;
   ydelta+=y;
+//   qDebug() << xdelta << " " << ydelta;
+  
+  // now move the view to the new coordinates
+  QRectF v = graphicsView->sceneRect();
+  v.moveTo(v.x()+x, v.y()+y);
+  graphicsView->setSceneRect(v);
 
   if (xdelta > cellsize) {
     // move east
@@ -92,64 +89,6 @@ void mainWidget::moveSceneRectBy(int x, int y) {
     moveTileBoxRelative(0,-1);
     ydelta%=cellsize;
   }
-
-  // now move the view to the new coordinates
-  QRectF v = graphicsView->sceneRect();
-  v.moveTo(v.x()+x, v.y()+y);
-  graphicsView->setSceneRect(v);
-}
-
-// void mainWidget::moveSceneRectAbsolute(int x, int y) {
-//   //TODO
-//   if (x == xoffset && y == yoffset)
-//     return;
-//   qDebug() << __PRETTY_FUNCTION__ << "todo";
-//   return;
-//   QRectF v = graphicsView->sceneRect();
-//   v.moveTo(v.x()+x, v.y()+y);
-//   graphicsView->setSceneRect(v);
-// }
-
-void mainWidget::colorstate_changed( bool state){
-  settings->setValue("drawcoloredOrBlackWhite", state);
-  colorstate = state;
-  resetTiles();
-}
-
-void mainWidget::frequency_changed(double i){
-  settings->setValue("frequency", i);
-  frequency = i;
-  resetTiles();
-}
-
-void mainWidget::octave_changed(int i){
-  settings->setValue("octave",i);
-  octave = i;
-  resetTiles();
-}
-
-// void mainWidget::xoffset_changed(int x){
-//   settings->setValue("xoffset", x);
-//   exit(0);
-//   moveSceneRectAbsolute(x,yoffset);
-// }
-// 
-// void mainWidget::yoffset_changed(int y){
-//   settings->setValue("yoffset", y);
-//   moveSceneRectAbsolute(xoffset,y);
-// }
-
-void mainWidget::resetTiles() {
-  tjc->clearJobs();
-  tileCoordinatesDB.clear();
-  foreach (QGraphicsItem * z,scene->items()) {
-    scene->removeItem(z);
-  }
-
-//   scene->addLine(QLineF(-600,0,600,0));
-//   scene->addLine(QLineF(0,-600,0,600));
-
-  moveTileBoxRelative(0,0);
 }
 
 /*!
@@ -169,8 +108,6 @@ void mainWidget::moveTileBoxRelative(int x, int y) {
   settings->setValue("xoffset", xBoxOffset);
   settings->setValue("yoffset", yBoxOffset);
 
-//   xoffsetBox->setValue(xBoxOffset);
-//   yoffsetBox->setValue(yBoxOffset);
 
 //   s1cene->addText(". 0/0 is here");
 
@@ -278,3 +215,33 @@ void mainWidget::jobDone(renderJob job){
   itemLabel->setText(QString("%1").arg(scene->items().size()));
 }
 
+void mainWidget::colorstate_changed( bool state){
+  settings->setValue("drawcoloredOrBlackWhite", state);
+  colorstate = state;
+  resetTiles();
+}
+
+void mainWidget::frequency_changed(double i){
+  settings->setValue("frequency", i);
+  frequency = i;
+  resetTiles();
+}
+
+void mainWidget::octave_changed(int i){
+  settings->setValue("octave",i);
+  octave = i;
+  resetTiles();
+}
+
+void mainWidget::resetTiles() {
+  tjc->clearJobs();
+  tileCoordinatesDB.clear();
+  foreach (QGraphicsItem * z,scene->items()) {
+    scene->removeItem(z);
+  }
+
+  scene->addLine(QLineF(-600,0,600,0));
+  scene->addLine(QLineF(0,-600,0,600));
+
+  moveTileBoxRelative(0,0);
+}

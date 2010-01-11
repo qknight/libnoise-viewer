@@ -42,4 +42,8 @@ void movableGraphicsView::mouseMoveEvent ( QMouseEvent * event ) {
   }
 }
 
-
+void movableGraphicsView::resizeEvent ( QResizeEvent * event ) {
+//   qDebug() << __PRETTY_FUNCTION__ << width() << " " << height();
+  //FIXME why -6 pixels?
+  setSceneRect(QRect(0, 0, width()-6, height()-6));
+}

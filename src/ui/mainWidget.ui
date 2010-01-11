@@ -32,6 +32,9 @@
       <property name="horizontalScrollBarPolicy">
        <enum>Qt::ScrollBarAlwaysOff</enum>
       </property>
+      <property name="transformationAnchor">
+       <enum>QGraphicsView::AnchorViewCenter</enum>
+      </property>
       <property name="resizeAnchor">
        <enum>QGraphicsView::AnchorViewCenter</enum>
       </property>

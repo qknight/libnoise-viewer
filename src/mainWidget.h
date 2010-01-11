@@ -21,11 +21,11 @@
 #include <QTime>
 #include <QPoint>
 #include <QVector>
+#include <QGraphicsScene>
 #include "ui_mainWidget.h"
 #include "renderThread.h"
 #include "renderJob.h"
 #include "threadJobControl.h"
-#include "movableGraphicsScene.h"
 #include "movableGraphicsView.h"
 
 class mainWidget : public QDialog, private Ui::noiseViewWidget
@@ -38,7 +38,7 @@ class mainWidget : public QDialog, private Ui::noiseViewWidget
   private:
     QSettings* settings;
     void populate();
-    movableGraphicsScene* scene;
+    QGraphicsScene* scene;
     bool colorstate; // 0 color / 1 bw
     double frequency;
     int octave;
@@ -58,11 +58,8 @@ class mainWidget : public QDialog, private Ui::noiseViewWidget
     void colorstate_changed(bool);
     void frequency_changed(double);
     void octave_changed(int);
-//     void xoffset_changed(int);
-//     void yoffset_changed(int);
     void jobDone(renderJob job);
     void moveSceneRectBy(int x, int y);
-//     void moveSceneRectAbsolute(int x, int y);
   signals:
     void jobDoneSig(renderJob job);
 };

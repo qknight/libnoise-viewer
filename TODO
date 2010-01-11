@@ -1,7 +1,8 @@
 known bugs/issues:
-- the graphicsview is smaller than the area it visualizes?!
+- view should center of 'scene' center
 - graphicsview vs view. one of these moves faster and so the view moves out of sight which is bad
 
+- harddrive access on scrolling using the mouse?!
 - opengl acceleration?
 - in qt4.5.x i get white borders in the rendering using the qgraphicsview, however they disappear if i 
   move the view via mouse click and drag
@@ -17,6 +18,7 @@ known bugs/issues:
   // TODO make sceneWidth dynamic in boundaries
 - remove prerender images from scene (right now they are just hidden)
 - implement mouse-wheel-zooming
+
 question:
  - can the frequency be changed without loosing current x/y position outside the center?
   - known as 'zoom issue': when zooming in the x coordinate is misplaced for some reason?!
