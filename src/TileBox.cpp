@@ -42,6 +42,8 @@ then iterated through in a 'cell by cell' basis. for each cell the tile is final
 this function does NOT compute any tile, only the coordinates for them
 */
 void TileBox::moveTileBox(QRectF sr) {
+    // update the sceneRect also at the job scheduler
+    tjc->sr=sr;
     for (int x=(sr.x()-(2.5f*cellsize))/cellsize; x < ((sr.x()+sr.width())+(2.5f*cellsize))/cellsize; x++) {
         for (int y=(sr.y()-(2.5f*cellsize))/cellsize; y < ((sr.y()+sr.width())+(2.5f*cellsize))/cellsize; y++) {
 //       qDebug() << "generating tile %i %i" << x << " " << y;

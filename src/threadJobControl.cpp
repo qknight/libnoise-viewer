@@ -15,7 +15,7 @@
 threadJobControl::threadJobControl() {
     runningJobs=0;
     connect(this, SIGNAL(jobStatusChangedSig()),
-            this, SLOT(jobStatusChanged()));
+            this, SLOT(scheduleJobs()));
 }
 threadJobControl::~threadJobControl() { }
 
@@ -30,7 +30,12 @@ void threadJobControl::queueJob(renderJob job) {
     emit jobStatusChangedSig();
 }
 
-void threadJobControl::jobStatusChanged() {
+/*!
+this function schedules the jobs based on priority (read speedup factors, for fast previews)
+FIXME use variable sr to find items which are in the current sceneRect and schedule rendering
+      for them first. easy but effective hack ;-)
+*/
+void threadJobControl::scheduleJobs() {
     if (runningJobs < 2) {
         if (jobs.size() > 0) {
             for (int i=0; i < jobs.size(); ++i) {
@@ -52,7 +57,7 @@ void threadJobControl::jobStatusChanged() {
 
 void threadJobControl::processJob(renderJob job) {
     renderThread* rt = new renderThread;
-    // TODO, empty rt out of renderThreads if done
+    // FIXME rt objects are not deleted
     renderThreads.push_back(rt);
 
     connect(rt,SIGNAL(renderingDoneSig(renderJob)),

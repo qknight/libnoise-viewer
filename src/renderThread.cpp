@@ -44,7 +44,7 @@ renderJob renderThread::generateRawImage (renderJob job) {
   myModule.SetOctaveCount (job.octave);
   myModule.SetFrequency (job.frequency);
 
-//    module::Perlin myModule;
+//   module::Perlin myModule;
 //   myModule.SetOctaveCount (job.octave);
 //   myModule.SetFrequency (job.frequency);
 

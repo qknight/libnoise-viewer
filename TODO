@@ -1,34 +1,33 @@
 known bugs/issues:
-- the QGraphicsView is not at it's full size right from the beginning so the
-    emit resetTilesSignal(graphicsView->sceneRect());
-  does not work properly
+- remove objects properly, right now a lot of memory is wasted since no delete is used
+- render the viewrect only. disable renderjobs outside it
+    - only render tiles which: 
+      - are below the view
+      - are 1/width or 1/height out of the view
+    - discard all scene items which are
+      - are 1/width or 1/height out of the view
+    - discard preview tiles after high quality tile is finished
+- give job by reference not by value (object copy)
+- increase importance of renderjobs inside the viewBox
+- remove prerender images from scene (right now they are just hidden)
+- kill threads: disable jobs which are not needed anymore
+- switching from back/white to color sometimes leaves black/white tiles on the QGraphicsScene since jobs
+  (read active threads) aren't canceled 'onChange' as well, so:
+  - first cancel all pending jobs
+  - next change the color
+- remove all TODOs
+- remove all FIXMEs
+
+===================== misc issues ===================================
 - harddrive access on scrolling using the mouse?!
 - opengl acceleration?
 - in qt4.5.x i get white borders in the rendering using the qgraphicsview, however they disappear if i 
   move the view via mouse click and drag
-- kill threads: disable jobs which are not needed anymore
-- give job by reference not by value (object copy)
-- remove objects properly, right now a lot of memory is wasted since no delete is used
-- render the viewrect only. disable renderjobs outside it
-- increase importance of renderjobs inside the viewBox
-- switching from back/white to color sometimes leaves black/white tiles on the QGraphicsScene since jobs
-  aren't canceled on change as well, so:
-  - first cancel all pending jobs
-  - next change the color
-
-  // TODO make sceneWidth dynamic in boundaries
-- remove prerender images from scene (right now they are just hidden)
-- implement mouse-wheel-zooming
 
 question:
  - can the frequency be changed without loosing current x/y position outside the center?
-  - known as 'zoom issue': when zooming in the x coordinate is misplaced for some reason?!
+   known as 'zoom issue': when zooming in the x coordinate is misplaced for some reason?!
+   FIX could be done with the noise::module::TranslatePoint module
 
-- only render tiles which: 
-  - are below the view
-  - are 1/width or 1/height out of the view
-- discard all scene items which are
-  - are 1/width or 1/height out of the view
-- discard preview tiles after high quality tile is finished
 
-- remove all TODOs
+

@@ -51,7 +51,6 @@ private Q_SLOTS:
     void resetTiles(QRectF);
     void generateTile(int x, int y);
     void jobDone(renderJob job);
-
 Q_SIGNALS:
     void jobDoneSig(renderJob job);
     void sceneItemCountSignal(int);

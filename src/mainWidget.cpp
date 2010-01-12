@@ -14,6 +14,9 @@ mainWidget::mainWidget(QDialog* parent) : QDialog(parent) {
     setupUi(this);
 
     scene = new QGraphicsScene;
+    // if the initial screen is bigger (shows white zones) increase
+    // this scene rect, could be done dynamically...
+    scene->setSceneRect(QRectF(-400,-400,800,800));
     graphicsView->setScene(scene);
 
     tileBox = new TileBox(scene);

@@ -15,18 +15,20 @@
 #include <QDebug>
 #include <QVector>
 #include <QObject>
-
+#include <QRectF>
 #include "renderThread.h"
 #include "renderJob.h"
 
 class threadJobControl : public QObject {
     Q_OBJECT
+friend class TileBox;
 
-public:
+protected:
     threadJobControl();
     ~threadJobControl();
     void queueJob(renderJob job);
     void clearJobs();
+    QRectF sr;
 private:
     void processJob(renderJob);
     QVector<renderThread*> renderThreads;
@@ -35,7 +37,7 @@ private:
 
 private Q_SLOTS:
     void renderingDone(renderJob);
-    void jobStatusChanged();
+    void scheduleJobs();
 Q_SIGNALS:
     void jobDoneSig(renderJob job);
     void jobStatusChangedSig();

@@ -1,4 +1,11 @@
 2010-01-12
+- the QGraphicsView is not at it's full size right from the beginning so the
+    emit resetTilesSignal(graphicsView->sceneRect());
+  does not work properly
+  FIXED with mainWidget.cpp
+    // if the initial screen is bigger (shows white zones) increase
+    // this scene rect, could be done dynamically...
+    scene->setSceneRect(QRectF(-400,-400,800,800));
 - FIXED octave/frequency should be used and stored in settings
 - FIXED used QGraphicsItems are not displayed
 - FIXED settings are currently not stored correctly
