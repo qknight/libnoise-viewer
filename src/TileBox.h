@@ -20,8 +20,47 @@
 #ifndef TILEBOX_H
 #define TILEBOX_H
 
-class TileBox
-{
+#include <QDebug>
+#include <QObject>
+#include <QImage>
+#include <QSettings>
+#include <QGraphicsRectItem>
+#include <QGraphicsScene>
+#include "renderThread.h"
+#include "renderJob.h"
+#include "threadJobControl.h"
+
+/*!
+The idea behind the TileBox is that the background (libnoise graph) is rendered in tiles and
+therefore we can have a very interactive QGraphicsView displaying the 'satellite image' of the surface.
+
+The TileBox computes each tile in a single thread which makes best use of multiple CPUs. All the
+TileBox needs to work is the current position of the 'QGraphicsView' and with this information
+we can render all the tiles needed to fit the view's width/height with tiles.
+*/
+class TileBox : public QObject {
+    Q_OBJECT
+public:
+    TileBox(QGraphicsScene* scene);
+    void reset();
+
+private Q_SLOTS:
+    void jobDone(renderJob job);
+    void moveSceneRectBy(int x, int y);
+    void generateTile(int x, int y);
+    void resetTiles();
+
+Q_SIGNALS:
+    void jobDoneSig(renderJob job);
+    void sceneItemCountSignal(int);
+private:
+    QVector<QPoint> tileCoordinatesDB;
+    QSettings* settings;
+    QGraphicsRectItem* viewBox;
+    QGraphicsScene* scene;
+    threadJobControl* tjc;
+    int cellsize;
+    void moveTileBoxRelative(int x, int y);
 };
 
 #endif // TILEBOX_H

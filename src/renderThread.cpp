@@ -40,37 +40,23 @@ renderJob renderThread::generateRawImage (renderJob job) {
   QTime tracker;
   tracker.start();
 
-//     qDebug("x %i",job.x);
-//     qDebug("y %i",job.y);
-//     qDebug("cellsize %i",job.cellsize);
-//     qDebug("colorstate %i",(unsigned int)job.colorstate);
-//     qDebug("speedup %i",job.speedup);
-//     qDebug("width %i",job.width);
-//     qDebug("height %i",job.height);
-//     qDebug("octave %i",job.octave);
-//     qDebug("frequency %f",job.frequency);
-
-//     module::Voronoi myModule;
-//   module::RidgedMulti myModule;
-   module::Perlin myModule;
-//   module::Billow myModule;
-//  module::Spheres myModule;
-
-//     mod.register("Frequency", GetFrequency(), SetFrequency(), <double>);
-
-//     std::cout << "GetFrequency() = " << myModule.GetFrequency   () << "\n";
-//     std::cout << "GetLacunarity() = " << myModule.GetLacunarity   ()<< "\n";
-//     std::cout << "GetNoiseQuality() = " << myModule.GetNoiseQuality   () << "\n";
-//     std::cout << "GetOctaveCount() = " << myModule.GetOctaveCount() << "\n";
-//     std::cout << "GetPersistence() = " << myModule.GetPersistence() << "\n";
-//     std::cout << "GetSeed() = " << myModule.GetSeed   () << "\n";
-//     std::cout << "GetSourceModuleCount() = " << myModule.GetSourceModuleCount   () << "\n";
-//
-//     module::Invert myModule;
-//     myModule.SetSourceModule(0,zModule);
-
+  module::RidgedMulti myModule;
   myModule.SetOctaveCount (job.octave);
   myModule.SetFrequency (job.frequency);
+
+//    module::Perlin myModule;
+//   myModule.SetOctaveCount (job.octave);
+//   myModule.SetFrequency (job.frequency);
+
+//     module::Voronoi myModule;
+//     myModule.SetFrequency (job.frequency);
+
+//   module::Billow myModule;
+//   myModule.SetOctaveCount (job.octave);
+//   myModule.SetFrequency (job.frequency);
+  
+//   module::Spheres myModule;
+//   myModule.SetFrequency (job.frequency);
 
   utils::NoiseMap heightMap;
   utils::NoiseMapBuilderPlane heightMapBuilder;

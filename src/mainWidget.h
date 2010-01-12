@@ -21,47 +21,33 @@
 #include <QTime>
 #include <QPoint>
 #include <QVector>
-#include <QGraphicsScene>
+
 #include "ui_mainWidget.h"
-#include "renderThread.h"
-#include "renderJob.h"
-#include "threadJobControl.h"
 #include "movableGraphicsView.h"
+#include "TileBox.h"
 
-class mainWidget : public QDialog, private Ui::noiseViewWidget
-{
-  Q_OBJECT
-
-  public:
+class mainWidget : public QDialog, private Ui::noiseViewWidget {
+    Q_OBJECT
+public:
     mainWidget(QDialog* parent=0);
-    ~mainWidget();
-  private:
+private:
     QSettings* settings;
-    void populate();
     QGraphicsScene* scene;
-    bool colorstate; // 0 color / 1 bw
+    TileBox* tileBox;
+    bool colorstate;
     double frequency;
     int octave;
-    int xoffset;
-    int yoffset;
-    threadJobControl* tjc;
-    static const int cellsize = 100;
-    /*! dispatches renderJobs which generate the tile at position x,y and return them via signal/slot */
-    void generateTile(int x, int y);
-    QGraphicsRectItem* viewBox;
-  private:
-    void resetTiles();
-    void moveTileBoxRelative(int x, int y);
-    QVector<QPoint> tileCoordinatesDB;
-
-  private slots:
+private Q_SLOTS:
     void colorstate_changed(bool);
     void frequency_changed(double);
     void octave_changed(int);
-    void jobDone(renderJob job);
-    void moveSceneRectBy(int x, int y);
-  signals:
-    void jobDoneSig(renderJob job);
+public Q_SLOTS:
+    void updateSceneItemLabel(int size);
+Q_SIGNALS:
+  void changeColorstate(bool);
+  void changeOctave(int);
+  void changeFrequency(double);
+  void resetTilesSignal();
 };
 
 #endif

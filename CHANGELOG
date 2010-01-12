@@ -1,3 +1,9 @@
+2010-01-12
+- view should center of 'scene' center
+  FIXED: resizeEvent now set's the QGraphicsView to look at x,y=0,0
+         there is now a resize issue, since a resize will currently reset the views position
+         to 0,0 which is not wanted...
+
 2010-01-11
  - BUG: the graphicsview is smaller than the area it visualizes?!
    how to reproduce:

@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>noiseGenerator View</string>
   </property>
-  <layout class="QGridLayout">
+  <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
@@ -43,15 +43,15 @@
       <property name="title">
        <string/>
       </property>
-      <layout class="QGridLayout">
-       <item row="0" column="0">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
         <widget class="QLabel" name="label">
          <property name="text">
           <string>Octaves</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item>
         <widget class="QSpinBox" name="octavesleft">
          <property name="minimum">
           <number>1</number>
@@ -61,14 +61,14 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
           <string>Frequency</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
+       <item>
         <widget class="QDoubleSpinBox" name="frequencyleft">
          <property name="decimals">
           <number>10</number>
@@ -81,21 +81,21 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
+       <item>
         <widget class="QRadioButton" name="r1">
          <property name="text">
           <string>Colored</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
+       <item>
         <widget class="QRadioButton" name="r2">
          <property name="text">
           <string>Black/White</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="0">
+       <item>
         <spacer>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -108,7 +108,25 @@
          </property>
         </spacer>
        </item>
-       <item row="7" column="0">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>coordinates x/y:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="coordinatesLabel">
+           <property name="text">
+            <string>0/0</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
         <layout class="QHBoxLayout">
          <item>
           <widget class="QLabel" name="label_5">
@@ -120,7 +138,7 @@
          <item>
           <widget class="QLabel" name="itemLabel">
            <property name="text">
-            <string>TextLabel</string>
+            <string>0</string>
            </property>
           </widget>
          </item>

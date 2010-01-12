@@ -1,7 +1,8 @@
 known bugs/issues:
-- view should center of 'scene' center
 - graphicsview vs view. one of these moves faster and so the view moves out of sight which is bad
-
+  FIXED: the events which previously moved the QGraphicsView now are in absolute coordinates
+           (not relatives) so this is no problem anymore
+- settings are currently not stored correctly
 - harddrive access on scrolling using the mouse?!
 - opengl acceleration?
 - in qt4.5.x i get white borders in the rendering using the qgraphicsview, however they disappear if i 
