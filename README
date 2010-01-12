@@ -2,6 +2,8 @@ this qt4 based project visualizes libnoise graphs.
 
 author: joachim schiele <js adt lastlog doddt de>
 
+================================= description? =============================================
+
 libnoise graphs are a set of noise modules which are composed into an image. this
 project not only displays a single image but gives you the impression you are
 watching a planetary surface using a camera in a satelite.
@@ -14,3 +16,19 @@ this project will later be included in one of my other projects, found here:
 
 source code for libnoise-viewer:
  * http://github.com/qknight/libnoise-viewer
+
+copyright is gpl-v3 using qt 4.5+
+
+================================= dependencies? =============================================
+
+you need libnoise to build this code, can be found here:
+ * http://github.com/qknight/libnoise
+
+================================= how to build? =============================================
+  after 'git clone' do
+  mkdir build
+  cd build
+  cmake ..
+  make
+
+  then start ./libnoise-viewer
