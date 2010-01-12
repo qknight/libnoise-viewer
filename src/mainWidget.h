@@ -30,6 +30,7 @@ class mainWidget : public QDialog, private Ui::noiseViewWidget {
     Q_OBJECT
 public:
     mainWidget(QDialog* parent=0);
+    ~mainWidget();
 private:
     QSettings* settings;
     QGraphicsScene* scene;
@@ -47,7 +48,7 @@ Q_SIGNALS:
   void changeColorstate(bool);
   void changeOctave(int);
   void changeFrequency(double);
-  void resetTilesSignal();
+  void resetTilesSignal(QRectF);
 };
 
 #endif

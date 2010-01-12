@@ -13,55 +13,56 @@
 
 
 threadJobControl::threadJobControl() {
-  runningJobs=0;
-  connect(this, SIGNAL(jobStatusChangedSig()),
-	  this, SLOT(jobStatusChanged()));
+    runningJobs=0;
+    connect(this, SIGNAL(jobStatusChangedSig()),
+            this, SLOT(jobStatusChanged()));
 }
 threadJobControl::~threadJobControl() { }
 
 void threadJobControl::clearJobs() {
-  jobs.clear();
-  //TODO kill pending threads
+    qDebug() << "killing: " << jobs.size() << " jobs";
+    jobs.clear();
+    //FIXME kill pending threads
 }
 
 void threadJobControl::queueJob(renderJob job) {
-  jobs.push_back(job);
-  emit jobStatusChangedSig();
+    jobs.push_back(job);
+    emit jobStatusChangedSig();
 }
 
 void threadJobControl::jobStatusChanged() {
-  if (runningJobs < 2) {
-    if (jobs.size() > 0) {
-      for (int i=0; i < jobs.size(); ++i) {
+    if (runningJobs < 2) {
+        if (jobs.size() > 0) {
+            for (int i=0; i < jobs.size(); ++i) {
 //         qDebug("%i",jobs[i].speedup);
-        if (jobs[i].speedup > 1) {
-          processJob(jobs[i]);
-          jobs.remove(i);
-          ++runningJobs;
-          return;
+                if (jobs[i].speedup > 1) {
+                    processJob(jobs[i]);
+                    jobs.remove(i);
+                    ++runningJobs;
+                    return;
+                }
+            }
+            int r=qrand()%jobs.size();
+            processJob(jobs[r]);
+            jobs.remove(r);
+            ++runningJobs;
         }
-      }
-      int r=qrand()%jobs.size();
-      processJob(jobs[r]);
-      jobs.remove(r);
-      ++runningJobs;
     }
-  }
 }
 
 void threadJobControl::processJob(renderJob job) {
-  renderThread* rt = new renderThread;
-  // TODO, empty rt out of renderThreads if done
-  renderThreads.push_back(rt);
+    renderThread* rt = new renderThread;
+    // TODO, empty rt out of renderThreads if done
+    renderThreads.push_back(rt);
 
-  connect(rt,SIGNAL(renderingDoneSig(renderJob)),
-      this,SLOT(renderingDone(renderJob)));
+    connect(rt,SIGNAL(renderingDoneSig(renderJob)),
+            this,SLOT(renderingDone(renderJob)));
 
-  rt->render(job);
+    rt->render(job);
 }
 
-void threadJobControl::renderingDone(renderJob job){
-  emit jobDoneSig(job);
-  --runningJobs;
-  emit jobStatusChangedSig();
+void threadJobControl::renderingDone(renderJob job) {
+    emit jobDoneSig(job);
+    --runningJobs;
+    emit jobStatusChangedSig();
 }

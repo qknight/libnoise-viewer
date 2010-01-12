@@ -1,14 +1,14 @@
 known bugs/issues:
-- graphicsview vs view. one of these moves faster and so the view moves out of sight which is bad
-  FIXED: the events which previously moved the QGraphicsView now are in absolute coordinates
-           (not relatives) so this is no problem anymore
-- settings are currently not stored correctly
+- the QGraphicsView is not at it's full size right from the beginning so the
+    emit resetTilesSignal(graphicsView->sceneRect());
+  does not work properly
 - harddrive access on scrolling using the mouse?!
 - opengl acceleration?
 - in qt4.5.x i get white borders in the rendering using the qgraphicsview, however they disappear if i 
   move the view via mouse click and drag
 - kill threads: disable jobs which are not needed anymore
 - give job by reference not by value (object copy)
+- remove objects properly, right now a lot of memory is wasted since no delete is used
 - render the viewrect only. disable renderjobs outside it
 - increase importance of renderjobs inside the viewBox
 - switching from back/white to color sometimes leaves black/white tiles on the QGraphicsScene since jobs

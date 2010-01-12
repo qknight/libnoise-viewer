@@ -12,6 +12,7 @@
 #ifndef THREADJOBCONTROL_H
 #define THREADJOBCONTROL_H
 
+#include <QDebug>
 #include <QVector>
 #include <QObject>
 
@@ -19,26 +20,25 @@
 #include "renderJob.h"
 
 class threadJobControl : public QObject {
-Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     threadJobControl();
     ~threadJobControl();
     void queueJob(renderJob job);
     void clearJobs();
-  private:
+private:
     void processJob(renderJob);
     QVector<renderThread*> renderThreads;
     QVector<renderJob> jobs;
     int runningJobs;
 
-  private slots:
+private Q_SLOTS:
     void renderingDone(renderJob);
     void jobStatusChanged();
-  signals:
-     void jobDoneSig(renderJob job);
-     void jobStatusChangedSig();
-
+Q_SIGNALS:
+    void jobDoneSig(renderJob job);
+    void jobStatusChangedSig();
 };
 
 #endif

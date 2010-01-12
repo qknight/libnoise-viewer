@@ -24,6 +24,10 @@ mainWidget::mainWidget(QDialog* parent) : QDialog(parent) {
     octave = settings->value("octave", 4).toInt();
     colorstate = settings->value("drawcoloredOrBlackWhite", true).toBool();
 
+    tileBox->colorstate=colorstate;
+    tileBox->octave=octave;
+    tileBox->frequency=frequency;
+
     if (colorstate)
         r1->setChecked(true);
     else
@@ -37,13 +41,22 @@ mainWidget::mainWidget(QDialog* parent) : QDialog(parent) {
             this, SLOT(frequency_changed(double)));
     connect(r1, SIGNAL( toggled ( bool )),
             this, SLOT( colorstate_changed(bool)));
-//     connect(graphicsView, SIGNAL(absoluteViewMoveSignal(int,int)),
-//             tileBox, SLOT(resetTiles()));
+
+    connect(graphicsView, SIGNAL(absoluteViewMoveSignal(QRectF)),
+            tileBox, SLOT(moveTileBox(QRectF)));
+
+    connect(this, SIGNAL(resetTilesSignal(QRectF)),
+            tileBox, SLOT(resetTiles(QRectF)));
+
+    connect(tileBox, SIGNAL(sceneItemCountSignal(int)),
+            this, SLOT(updateSceneItemLabel(int)));
 	    
-    connect(this, SIGNAL(resetTilesSignal()),
-            tileBox, SLOT(resetTiles()));
-	    
-    emit resetTilesSignal();
+    emit resetTilesSignal(graphicsView->sceneRect());
+}
+
+mainWidget::~mainWidget() {
+    delete tileBox;
+    delete scene;
 }
 
 void mainWidget::updateSceneItemLabel(int size) {
@@ -52,18 +65,18 @@ void mainWidget::updateSceneItemLabel(int size) {
 
 void mainWidget::colorstate_changed( bool state) {
     settings->setValue("drawcoloredOrBlackWhite", state);
-    colorstate = state;
-    emit changeColorstate(colorstate);
+    tileBox->colorstate=state;
+    emit resetTilesSignal(graphicsView->sceneRect());
 }
 
 void mainWidget::frequency_changed(double i) {
     settings->setValue("frequency", i);
-    frequency = i;
-    emit changeFrequency(i);
+    tileBox->frequency=i;
+    emit resetTilesSignal(graphicsView->sceneRect());
 }
 
 void mainWidget::octave_changed(int i) {
     settings->setValue("octave",i);
-    octave = i;
-    emit changeOctave(i);
+    tileBox->octave=i;
+    emit resetTilesSignal(graphicsView->sceneRect());
 }

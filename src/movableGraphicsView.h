@@ -35,7 +35,7 @@ class movableGraphicsView : public QGraphicsView
     bool onmove;
   public:
   signals:
-    void absoluteViewMoveSignal(int,int);
+    void absoluteViewMoveSignal(QRectF);
 
 };
 

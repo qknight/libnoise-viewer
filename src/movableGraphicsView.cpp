@@ -36,6 +36,7 @@ void movableGraphicsView::mouseMoveEvent ( QMouseEvent * event ) {
     if (onmove == true) {
         int xdiff = x - event->x();
         int ydiff = y - event->y();
+	
 	// x and y store the old values so we can compute the difference
         x = event->x();
         y = event->y();
@@ -45,7 +46,7 @@ void movableGraphicsView::mouseMoveEvent ( QMouseEvent * event ) {
         setSceneRect(v);
 
 // 	qDebug() << "you are looking at x/y = " << v.x()+ width()/2 << " " << v.y()+ height()/2;
-        emit absoluteViewMoveSignal(v.x()+ width()/2,v.y()+ height()/2);
+        emit absoluteViewMoveSignal(sceneRect());
     }
 }
 
@@ -59,5 +60,5 @@ void movableGraphicsView::resizeEvent ( QResizeEvent * event ) {
 //FIXME on resize the position is resetted to 0/0 which is bad if the resize happens at
 //      different coordinates (which is very likely)
     //FIXME why -6 pixels?
-    setSceneRect(QRect((-width()/2)+3, (-height()/2)+3, width()-3, height()-3));
+    setSceneRect(QRect((-width()/2)+10, (-height()/2)+10, width()-10, height()-10));
 }

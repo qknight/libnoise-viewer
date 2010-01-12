@@ -109,24 +109,6 @@
         </spacer>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>coordinates x/y:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="coordinatesLabel">
-           <property name="text">
-            <string>0/0</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
         <layout class="QHBoxLayout">
          <item>
           <widget class="QLabel" name="label_5">

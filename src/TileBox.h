@@ -23,6 +23,7 @@
 #include <QDebug>
 #include <QObject>
 #include <QImage>
+#include <QTime>
 #include <QSettings>
 #include <QGraphicsRectItem>
 #include <QGraphicsScene>
@@ -40,15 +41,16 @@ we can render all the tiles needed to fit the view's width/height with tiles.
 */
 class TileBox : public QObject {
     Q_OBJECT
+    friend class mainWidget;
 public:
     TileBox(QGraphicsScene* scene);
-    void reset();
+    ~TileBox();
 
 private Q_SLOTS:
-    void jobDone(renderJob job);
-    void moveSceneRectBy(int x, int y);
+    void moveTileBox(QRectF sr);
+    void resetTiles(QRectF);
     void generateTile(int x, int y);
-    void resetTiles();
+    void jobDone(renderJob job);
 
 Q_SIGNALS:
     void jobDoneSig(renderJob job);
@@ -60,7 +62,10 @@ private:
     QGraphicsScene* scene;
     threadJobControl* tjc;
     int cellsize;
-    void moveTileBoxRelative(int x, int y);
+protected:
+    bool colorstate;
+    double frequency;
+    int octave;
 };
 
 #endif // TILEBOX_H

@@ -25,186 +25,114 @@ TileBox::TileBox(QGraphicsScene* scene) {
     tjc = new threadJobControl;
     connect(tjc, SIGNAL(jobDoneSig(renderJob)),
             this, SLOT(jobDone(renderJob)));
-//     connect(graphicsView, SIGNAL(absoluteViewMoveSignal(int,int)),
-//             this, SLOT(moveSceneRectBy(int,int)));
-
 }
 
-void TileBox::moveSceneRectBy(int x, int y) {
-    // first let's see if the change affects more than a cellwidth
-//     static int xdelta=0;
-//     static int ydelta=0;
-//
-//     xdelta+=x;
-//     ydelta+=y;
-// //   qDebug() << xdelta << " " << ydelta;
-//
-//     // now move the view to the new coordinates
-// //     QRectF v = graphicsView->sceneRect();
-// //     v.moveTo(v.x()+x, v.y()+y);
-//     graphicsView->setSceneRect(v);
-//
-//     if (xdelta > cellsize) {
-//         // move east
-//         moveTileBoxRelative(1,0);
-//         xdelta%=cellsize;
-//     }
-//
-//     if (-xdelta > cellsize) {
-//         // move west
-//         moveTileBoxRelative(-1,0);
-//         xdelta%=cellsize;
-//     }
-//
-//     if (ydelta > cellsize) {
-//         // move south
-//         moveTileBoxRelative(0,1);
-//         ydelta%=cellsize;
-//     }
-//
-//     if (-ydelta > cellsize) {
-//         // move north
-//         moveTileBoxRelative(0,-1);
-//         ydelta%=cellsize;
-//     }
+TileBox::~TileBox() {
+    qDebug() << "killing jobs";
+    tjc->clearJobs();
 }
-
 /*!
 the QGraphicsView's width/height is covered by the TileBox.
 to be precises: the TileBox is even more. the idea is to compute the tiles in advance.
 this helps to get a more interactive feeling...
+
+this function uses QGraphicsView.sceneRect(), expands it and creates a grid which is
+then iterated through in a 'cell by cell' basis. for each cell the tile is finally generated.
+
+this function does NOT compute any tile, only the coordinates for them
 */
-void TileBox::moveTileBoxRelative(int x, int y) {
-//     static int xBoxOffset=0;
-//     static int yBoxOffset=0;
-//
-// //   qDebug("moving by x=%i, y=%i", x, y);
-//
-//     xBoxOffset+=x;
-//     yBoxOffset+=y;
-//
-//     settings->setValue("xoffset", xBoxOffset);
-//     settings->setValue("yoffset", yBoxOffset);
-//
-// //   s1cene->addText(". 0/0 is here");
-//
-// //   qDebug("Boxoff by x=%i, y=%i", xBoxOffset, yBoxOffset);
-//
-//     QRectF sr = graphicsView->sceneRect();
-//     int viewWidth =  (int) sr.width();
-//     int viewHeight = (int) sr.height();
-//
-//     int xboxes = (viewWidth+cellsize/2) / cellsize;
-//     int yboxes = (viewHeight+cellsize/2) / cellsize;
-//
-//     if (xboxes%2)
-//         xboxes++;
-//     if (yboxes%2)
-//         yboxes++;
-//
-// //   qDebug("xboxes: %i yboxes: %i", xboxes, yboxes);
-//
-//     int rx1 =  xBoxOffset * cellsize + cellsize * (-xboxes/2);
-//     int ry1 =  yBoxOffset * cellsize + cellsize * (-yboxes/2);
-//     int rx2 =  cellsize * (xboxes);
-//     int ry2 =  cellsize * (yboxes);
-//
-// //   scene->removeItem( viewBox );
-// //   viewBox = scene->addRect (QRectF(rx1,ry1,rx2,ry2));
-// //   viewBox->setZValue(200);
-//
-//     int n=0;
-//     for (int x=xBoxOffset-xboxes/2+1; x < xBoxOffset+xboxes/2+1; ++x) {
-//         for (int y=yBoxOffset-yboxes/2+1; y < yBoxOffset+yboxes/2+1; ++y) {
-//             ++n;
-// //       qDebug("generating tile %i %i", x,y);
-//             generateTile(x,y);
-//         }
-//     }
+void TileBox::moveTileBox(QRectF sr) {
+    for (int x=(sr.x()-(2.5f*cellsize))/cellsize; x < ((sr.x()+sr.width())+(2.5f*cellsize))/cellsize; x++) {
+        for (int y=(sr.y()-(2.5f*cellsize))/cellsize; y < ((sr.y()+sr.width())+(2.5f*cellsize))/cellsize; y++) {
+//       qDebug() << "generating tile %i %i" << x << " " << y;
+            generateTile(x,y);
+        }
+    }
 }
 
 /*!
 this will create a new thread for computing a new tile
+x and y specify which tile, [x=0,y=0] would be the first tile
+ranging from [x1,x2=0 y1,y2=cellsize]
 */
 void TileBox::generateTile(int x, int y) {
-//     int itempos_x = x*cellsize+xoffset-cellsize;
-//     int itempos_y = y*cellsize+yoffset-cellsize;
-//
-// //   qDebug("%i %i",itempos_x,itempos_y);
-//     // TODO add check if items already exist, if not then
-//     // add them not else
-//
-//     foreach (QPoint n, tileCoordinatesDB) {
-//         if (n.x() == itempos_x && n.y() == itempos_y)
-//             return;
-//     }
-//
-//     renderJob job;
-//
-//     job.id=qrand()%4000;
-//     job.x=itempos_x;
-//     job.y=itempos_y;
-//     job.cellsize=cellsize;
-//     job.colorstate=colorstate;
-//
-//     job.width=cellsize;
-//     job.height=cellsize;
-//     job.octave=octave;
-//     job.frequency=frequency;
-//
-//     // no speedup, speedup = 1
-//     job.speedup=1;
-//     tjc->queueJob(job);
-//
-//     // this dispatches the second renderjob which is much faster done
-//     job.speedup=4;
-//     tjc->queueJob(job);
-//
-//     tileCoordinatesDB.push_back(QPoint(itempos_x, itempos_y));
+    int itempos_x = x*cellsize;
+    int itempos_y = y*cellsize;
+
+//   qDebug("%i %i",itempos_x,itempos_y);
+    // TODO add check if items already exist, if not then
+    // add them else don't
+
+    foreach (QPoint n, tileCoordinatesDB) {
+        if (n.x() == itempos_x && n.y() == itempos_y) {
+// 	  qDebug() << __PRETTY_FUNCTION__ << ": item already exists";
+            return;
+        }
+    }
+
+    renderJob job;
+
+    job.id=qrand()%4000;
+    job.x=itempos_x;
+    job.y=itempos_y;
+    job.cellsize=cellsize;
+    job.colorstate=colorstate;
+
+    job.width=cellsize;
+    job.height=cellsize;
+    job.octave=octave;
+    job.frequency=frequency;
+
+    // no speedup, speedup = 1
+    job.speedup=1;
+    tjc->queueJob(job);
+
+    // this dispatches the second renderjob which is much faster done
+    job.speedup=4;
+    tjc->queueJob(job);
+
+    tileCoordinatesDB.push_back(QPoint(itempos_x, itempos_y));
 }
 
 /*!
-This function is called, when a new tile is rendered and should be displayed in the main gui thread
+This callback function is called, when a new tile is rendered and should be displayed in the main gui thread
 */
 void TileBox::jobDone(renderJob job) {
-//     int speedup = job.speedup;
-//     int width = job.width;
-//     int height = job.height;
-//     QTime tracker;
-//     tracker.start();
-//
-//     QImage qimage(width/speedup, height/speedup, QImage::Format_RGB32);
-//     for (int i=0; i < width/speedup; ++i) {
-//         for (int j=0; j < height/speedup; ++j) {
-//             int o=(j+i*width/speedup)*3;
-//             QRgb val = QColor((unsigned char)job.ba[o+0],(unsigned char)job.ba[o+1],(unsigned char)job.ba[o+2]).rgb();
-//             qimage.setPixel(i,j,val);
-//         }
-//     }
-//
-//     QPixmap pix = QPixmap().fromImage(qimage,Qt::AutoColor).scaled(job.cellsize,job.cellsize);
-//     QGraphicsPixmapItem* ni = new QGraphicsPixmapItem(pix);
-//     ni->moveBy(job.x-xoffset, job.y-yoffset);
-//     ni->setZValue(-job.speedup);
-//     scene->addItem(ni);
-//   qDebug("Time elapsed to process the rawimage into an image and adding it to the scene: %d ms", tracker.elapsed());
-//     emit sceneItemCountSignal(scene->items().size());
+    int speedup = job.speedup;
+    int width = job.width;
+    int height = job.height;
+    QTime tracker;
+    tracker.start();
 
+    QImage qimage(width/speedup, height/speedup, QImage::Format_RGB32);
+    for (int i=0; i < width/speedup; ++i) {
+        for (int j=0; j < height/speedup; ++j) {
+            int o=(j+i*width/speedup)*3;
+            QRgb val = QColor((unsigned char)job.ba[o+0],(unsigned char)job.ba[o+1],(unsigned char)job.ba[o+2]).rgb();
+            qimage.setPixel(i,j,val);
+        }
+    }
+
+    QPixmap pix = QPixmap().fromImage(qimage,Qt::AutoColor).scaled(job.cellsize,job.cellsize);
+    QGraphicsPixmapItem* ni = new QGraphicsPixmapItem(pix);
+    ni->moveBy(job.x, job.y);
+    ni->setZValue(-job.speedup);
+    scene->addItem(ni);
+//     qDebug("Time elapsed to process the rawimage into an image and adding it to the scene: %d ms", tracker.elapsed());
+    emit sceneItemCountSignal(scene->items().size());
 }
 
-void TileBox::reset() {
-//   tjc->clearJobs();
+void TileBox::resetTiles(QRectF sr) {
+    tjc->clearJobs();
     tileCoordinatesDB.clear();
-}
-
-void TileBox::resetTiles() {
     foreach (QGraphicsItem * z,scene->items()) {
         scene->removeItem(z);
     }
-
+    
+    // coordinate system
     scene->addLine(QLineF(-300,0,300,0));
     scene->addLine(QLineF(0,-300,0,300));
 
     //FIXME write new configuration values to class TileBox
-//     moveTileBox(0,0);
+    moveTileBox(sr);
 }

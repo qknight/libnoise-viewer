@@ -1,4 +1,10 @@
 2010-01-12
+- FIXED octave/frequency should be used and stored in settings
+- FIXED used QGraphicsItems are not displayed
+- FIXED settings are currently not stored correctly
+- graphicsview vs view. one of these moves faster and so the view moves out of sight which is bad
+  FIXED: the events which previously moved the QGraphicsView now are in absolute coordinates
+           (not relatives) so this is no problem anymore
 - view should center of 'scene' center
   FIXED: resizeEvent now set's the QGraphicsView to look at x,y=0,0
          there is now a resize issue, since a resize will currently reset the views position
