@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 2.6)
 
 # i would to see more projects using these defaults
-ADD_DEFINITIONS( "-Wall -ansi" )
+# ADD_DEFINITIONS( "-Wall -ansi" )
+SET(CMAKE_CXX_FLAGS_DEFAULT "-O3")
 # ADD_DEFINITIONS( "-Wall -ansi -pedantic" )
 project(libnoise-view CXX C)
 
@@ -10,7 +11,6 @@ find_package(Qt4)
 # see http://cmake.org/cmake/help/cmake2.6docs.html#module:FindQt4
 # SET (QT_USE_QTOPENGL 1)
 # SET (QT_USE_QTXML 1) 
-
 
 SET( libnoise-view_SOURCES 
  src/TileBox.cpp 
