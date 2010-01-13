@@ -74,7 +74,7 @@ renderJob renderThread::generateRawImage (renderJob job) {
 
   if (job.colorstate) {
     renderer.ClearGradient ();
-
+  
     renderer.AddGradientPoint ( 1.000000, utils::Color (0, 90, 0, 255));
     renderer.AddGradientPoint ( 0.740000, utils::Color (0, 129, 0, 255));
     renderer.AddGradientPoint ( 0.700000, utils::Color (0, 190, 0, 255));

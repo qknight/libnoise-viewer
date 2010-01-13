@@ -11,7 +11,6 @@
 //
 #include "threadJobControl.h"
 
-
 threadJobControl::threadJobControl() {
     runningJobs=0;
     connect(this, SIGNAL(jobStatusChangedSig()),
@@ -26,7 +25,7 @@ void threadJobControl::clearJobs() {
 }
 
 void threadJobControl::queueJob(renderJob job) {
-    jobs.push_back(job);
+    jobs.push_front(job);
     emit jobStatusChangedSig();
 }
 
@@ -47,9 +46,8 @@ void threadJobControl::scheduleJobs() {
                     return;
                 }
             }
-            int r=qrand()%jobs.size();
-            processJob(jobs[r]);
-            jobs.remove(r);
+            processJob(jobs[0]);
+            jobs.remove(0);
             ++runningJobs;
         }
     }

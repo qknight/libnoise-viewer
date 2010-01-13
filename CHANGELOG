@@ -1,4 +1,9 @@
 2010-01-12
+- scheduler now does not issue jobs at random but front-back instead which means that
+  if you scroll the view in only one direction (but not backward to an area which has not
+  been rendered jet) you will always get the latest area rendered first.
+
+2010-01-12
 - the QGraphicsView is not at it's full size right from the beginning so the
     emit resetTilesSignal(graphicsView->sceneRect());
   does not work properly
